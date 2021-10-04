@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/pedro-darde/ts-api#readme",
   "devDependencies": {
+    "@shelf/jest-mongodb": "^2.1.0",
     "@types/bcrypt": "^5.0.0",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.1",
@@ -46,6 +47,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "mongodb": "^4.1.2",
     "validator": "^13.6.0"
   }
 }
