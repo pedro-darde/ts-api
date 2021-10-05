@@ -8,6 +8,7 @@ export class AccountMongoRepository implements AddAccountRepository {
     const { insertedId } = await accountCollection.insertOne(accountData)
     const result = await accountCollection.findOne(insertedId)
     const { _id, ...accountWihtouId } = result
+
     /* @ts-expect-error */
     return Object.assign({}, accountWihtouId, { id: _id })
   }
