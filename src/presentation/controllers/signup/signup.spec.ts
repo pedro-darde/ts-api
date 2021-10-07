@@ -136,7 +136,7 @@ describe('Signup Controller', () => {
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
 
-    expect(httpResponse).toEqual(serverError())
+    expect(httpResponse).toEqual(serverError(null))
   })
 
   test('Should return 400 if an passwordConfirmation doesnt match password', async () => {
@@ -173,7 +173,7 @@ describe('Signup Controller', () => {
     })
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(serverError())
+    expect(httpResponse).toEqual(serverError(null))
   })
 
   test('Should return 200 if valid data is provided', async () => {
