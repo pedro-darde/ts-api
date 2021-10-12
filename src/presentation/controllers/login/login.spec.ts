@@ -1,5 +1,5 @@
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
-import { badRequest, serverError, unauthorized } from '@/presentation/helpers/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http-helper'
 import { LoginController } from './login'
 import { HttpRequest, EmailValidator, Authentication } from './login-protocols'
 interface SutTypes {
@@ -109,5 +109,11 @@ describe('Login Controller', () => {
     jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const httpResponse = await loginController.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 200 if valid credentials are provided', async () => {
+    const { loginController } = makeSut()
+    const httpResponse = await loginController.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok({ accessToken: 'generated_token' }))
   })
 })
