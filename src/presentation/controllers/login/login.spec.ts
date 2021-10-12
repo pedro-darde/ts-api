@@ -1,3 +1,4 @@
+import { Authentication } from '@/domain/usecases/authentication'
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/helpers/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
@@ -7,6 +8,7 @@ import { LoginController } from './login'
 interface SutTypes {
   loginController: LoginController
   emailValidatorStub: EmailValidator
+  authenticationStub: Authentication
 }
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -25,10 +27,20 @@ const makeEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub()
 }
 
+const makeAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth (email: string, password: string): Promise<string> {
+      return 'generated_token'
+    }
+  }
+  return new AuthenticationStub()
+}
+
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator()
-  const loginController = new LoginController(emailValidatorStub)
-  return { loginController, emailValidatorStub }
+  const authenticationStub = makeAuthentication()
+  const loginController = new LoginController(emailValidatorStub, authenticationStub)
+  return { loginController, emailValidatorStub, authenticationStub }
 }
 
 describe('Login Controller', () => {
@@ -78,5 +90,13 @@ describe('Login Controller', () => {
 
     const httpResponse = await loginController.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should call Authenticantion with correctValues', async () => {
+    const { loginController, authenticationStub } = makeSut()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+
+    await loginController.handle(makeFakeRequest())
+    expect(authSpy).toHaveBeenCalledWith('any_email@mail.com', 'any_password')
   })
 })
