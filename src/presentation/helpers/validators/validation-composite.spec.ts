@@ -45,4 +45,10 @@ describe('RequiredFieldValidation', () => {
     const err = sut.validate({ field: 'any_value' })
     expect(err).toEqual(new Error())
   })
+
+  test('Should not return if validation succeeds', () => {
+    const { sut } = makeSut()
+    const err = sut.validate({ field: 'any_value' })
+    expect(err).toBeFalsy()
+  })
 })
