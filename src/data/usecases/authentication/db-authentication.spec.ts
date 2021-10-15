@@ -3,7 +3,7 @@ import {
   DbAuthentication,
   LoadAccountByEmailRepository,
   HashCompare,
-  TokenGenerator,
+  Encrypter,
   UpdateAccessTokenRepository,
   AuthenticationModel
 } from './db-authentication-protocols'
@@ -35,9 +35,9 @@ const makeHashCompare = (): HashCompare => {
   return new HashCompareStub()
 }
 
-const makeTokenGenerator = (): TokenGenerator => {
-  class TokenGeneratorStub implements TokenGenerator {
-    async generate (id: string): Promise<string> {
+const makeTokenGenerator = (): Encrypter => {
+  class TokenGeneratorStub implements Encrypter {
+    async encrypt (id: string): Promise<string> {
       return 'any_token'
     }
   }
@@ -64,7 +64,7 @@ interface SutTypes {
   sut: DbAuthentication
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   hashCompareStub: HashCompare
-  tokenGeneratorStub: TokenGenerator
+  tokenGeneratorStub: Encrypter
   updateAccessTokenRepositoryStub: UpdateAccessTokenRepository
 }
 
@@ -149,7 +149,7 @@ describe('DbAuthetication usecase', () => {
       tokenGeneratorStub,
       sut
     } = makeSut()
-    const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate')
+    const generateSpy = jest.spyOn(tokenGeneratorStub, 'encrypt')
     await sut.auth(makeFakeAuthentication())
     expect(generateSpy).toHaveBeenCalledWith('any_id')
   })
@@ -159,7 +159,7 @@ describe('DbAuthetication usecase', () => {
       tokenGeneratorStub,
       sut
     } = makeSut()
-    jest.spyOn(tokenGeneratorStub, 'generate').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    jest.spyOn(tokenGeneratorStub, 'encrypt').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.auth(makeFakeAuthentication())
     await expect(promise).rejects.toThrow()
   })
