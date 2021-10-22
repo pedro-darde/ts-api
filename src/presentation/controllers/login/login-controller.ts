@@ -26,7 +26,7 @@ export class LoginController implements Controller {
       if (!acessToken) {
         return unauthorized()
       }
-      return ok({ accessToken: 'generated_token' })
+      return ok({ accessToken: acessToken })
     } catch (error) {
       return serverError(error)
     }

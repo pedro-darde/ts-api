@@ -6,13 +6,15 @@ import {
   UpdateAccessTokenRepository,
   AuthenticationModel
 } from './db-authentication-protocols'
+import { ObjectId } from 'mongodb'
 
 export class DbAuthentication implements Authentication {
   constructor (
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashCompare: HashCompare,
     private readonly encrypter: Encrypter,
-    private readonly updateAccessTokenRepository: UpdateAccessTokenRepository) {}
+    private readonly updateAccessTokenRepository: UpdateAccessTokenRepository) {
+  }
 
   async auth (authentication: AuthenticationModel): Promise<string> {
     const account = await this.loadAccountByEmailRepository.loadByEmail(authentication.email)
@@ -20,7 +22,7 @@ export class DbAuthentication implements Authentication {
       const isValid = await this.hashCompare.compare(authentication.password, account.password)
       if (isValid) {
         const accessToken = await this.encrypter.encrypt(account.id)
-        await this.updateAccessTokenRepository.updateAccessToken(account.id, accessToken)
+        await this.updateAccessTokenRepository.updateAccessToken(new ObjectId(account.id), accessToken)
         return accessToken
       }
     }
