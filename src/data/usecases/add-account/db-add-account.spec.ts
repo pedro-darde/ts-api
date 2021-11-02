@@ -97,7 +97,7 @@ describe('DbAddAccount Usecase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should return an account on sucess', async () => {
+  test('Should return an account on success', async () => {
     const { sut } = makeSut()
 
     const account = await sut.add(makeAccountData())
@@ -114,5 +114,5 @@ describe('DbAddAccount Usecase', () => {
     await sut.add(makeFakeAccount())
     expect(loadSpy).toHaveBeenCalledWith('valid_email@mail.com')
   })
-  
+
 })
