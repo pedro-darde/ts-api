@@ -85,7 +85,7 @@ describe('DbAddAccount Usecase', () => {
     await sut.add(makeAccountData())
     expect(addSpy).toHaveBeenCalledWith({
       name: 'valid_name',
-      email: 'valid_email',
+      email: 'valid_email@mail.com',
       password: 'hashed_password'
     })
   })
