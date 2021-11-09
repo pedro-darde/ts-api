@@ -33,6 +33,7 @@ const makeDecrypter = (): Decrypter => {
   }
   return new DecrypterStub()
 }
+
 const makeSut = (): SutTypes => {
   const decrypterStub = makeDecrypter()
   const loadAccountByTokenRepositoryStub = makeLoadAccountByTokenRepository()
