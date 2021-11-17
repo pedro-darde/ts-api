@@ -28,6 +28,7 @@ export class LoginController implements Controller {
       }
       return ok({ accessToken: accessToken })
     } catch (error) {
+      console.log('tetas', error)
       return serverError(error)
     }
   }

@@ -4,6 +4,7 @@ import { badRequest, noContent, serverError } from '../../../helpers/http/http-h
 export class AddSurveyController implements Controller {
   private readonly validation: Validation
   private readonly addSurvey: AddSurvey
+
   constructor (validation: Validation, addSurvey: AddSurvey) {
     this.validation = validation
     this.addSurvey = addSurvey
@@ -21,7 +22,8 @@ export class AddSurveyController implements Controller {
       } = httpRequest.body
       await this.addSurvey.add({
         question,
-        answers
+        answers,
+        date: new Date()
       })
       return noContent()
     } catch (e) {
