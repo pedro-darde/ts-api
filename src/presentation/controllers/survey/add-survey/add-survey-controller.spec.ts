@@ -48,10 +48,10 @@ const makeSut = (): SutTypes => {
 }
 
 describe('AddSurveyController', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     MockDate.set(new Date())
   })
-  beforeAll(() => {
+  afterAll(() => {
     MockDate.reset()
   })
   test('Should call validation with correct values', async () => {
